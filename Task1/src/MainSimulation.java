@@ -11,6 +11,7 @@ public class MainSimulation extends GlobalSimulation{
     		time = 0;
         	Event actEvent;
         	State actState = new State(arrTimes[i]); // The state that shoud be used
+
         	// Some events must be put in the event list at the beginning
         	insertEvent(ARRIVEQ1, 0);  
             insertEvent(MEASURE, 5);

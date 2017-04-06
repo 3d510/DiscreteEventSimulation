@@ -7,4 +7,8 @@ class Event{
 	public double eventTime;
 	public int eventType;
 	public Event next;
+	
+	public void show() {
+		System.out.printf("%f %d\n", eventTime, eventType);
+	}
 }

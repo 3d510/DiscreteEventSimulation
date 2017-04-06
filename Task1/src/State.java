@@ -18,7 +18,8 @@ class State extends GlobalSimulation{
 	
 	// The following method is called by the main program each time a new event has been fetched
 	// from the event list in the main loop. 
-	public void treatEvent(Event x){
+	public void treatEvent(Event x) {
+//		x.show();
 		switch (x.eventType){
 			case ARRIVEQ1:
 				arrivalq1();
@@ -28,6 +29,7 @@ class State extends GlobalSimulation{
 				break;
 			case DEPARTQ2:
 				departq2();
+				break;
 			case MEASURE:
 				measure();
 				break;
@@ -63,7 +65,7 @@ class State extends GlobalSimulation{
 	private void departq2() {
 		numberInQ2--;
 		if (numberInQ2 > 0)
-			insertEvent(DEPARTQ2, time + time + 2);
+			insertEvent(DEPARTQ2, time + 2);
 	}
 	
 	private void measure(){
@@ -72,9 +74,7 @@ class State extends GlobalSimulation{
 		insertEvent(MEASURE, time + exp(5));
 	}
 	
-	private double exp(double mean) {
-		if (mean == 0)
-			return 1000000000;
-		return -Math.log(1-slump.nextDouble())/mean;
+	public double exp(double mean) {
+		return -Math.log(1-slump.nextDouble())*mean;
 	}
 }
