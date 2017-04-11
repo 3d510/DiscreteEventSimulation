@@ -7,7 +7,7 @@ public class MainSimulation extends GlobalSimulation{
    
     	double[] arrTimes = {2,1.5,1.1}; 
     	
-    	for (int i=2; i<3; i++) {
+    	for (int i=0; i<3; i++) {
     		time = 0;
         	Event actEvent;
         	State actState = new State(arrTimes[i]); // The state that should be used
@@ -16,7 +16,7 @@ public class MainSimulation extends GlobalSimulation{
         	insertEvent(ARRIVEQ1, 0, 0);  
             insertEvent(MEASURE, 5, -1);
         	// The main simulation loop
-        	while (actState.noMeasurements<10) {
+        	while (actState.noMeasurements<1000) {
         		actEvent = eventList.fetchEvent();
         		time = actEvent.eventTime;
         		actState.treatEvent(actEvent);
@@ -25,6 +25,10 @@ public class MainSimulation extends GlobalSimulation{
         	System.out.printf("Mean number of customers in both queues: %f\n", 1.0*actState.curCustomersSum/actState.noMeasurements);
         	System.out.printf("Mean time of customer in system: %f\n", actState.curTimeInSystemSum/actState.noArrivals);
         	System.out.println();
+        	
+//        	for (int j=0; j<actState.customerEnterTime.size(); j++) {
+//        		System.out.printf("%d %f\n", j, actState.customerEnterTime.get(j));
+//        	}
     	}
     	
     }

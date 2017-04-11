@@ -11,8 +11,8 @@ class State extends GlobalSimulation{
 	public double curTimeInSystemSum = 0;
 	private double interArrTime;
 	private int nextCustQ1 = 0, nextCustQ2 = 0;
-	private List<Double> customerEnterTime = new ArrayList<Double>();
-	private List<Integer> customerStatus = new ArrayList<Integer>();
+	public List<Double> customerEnterTime = new ArrayList<Double>();
+	// private List<Integer> customerStatus = new ArrayList<Integer>();
 
 	Random slump = new Random(); // This is just a random number generator
 	
@@ -23,7 +23,7 @@ class State extends GlobalSimulation{
 	// The following method is called by the main program each time a new event has been fetched
 	// from the event list in the main loop. 
 	public void treatEvent(Event x) {
-		 x.show();
+		// x.show();
 		switch (x.eventType){
 			case ARRIVEQ1:
 				arrivalq1(x);
@@ -74,7 +74,7 @@ class State extends GlobalSimulation{
 		nextCustQ2++;
 		if (x.custId < customerEnterTime.size())
 			curTimeInSystemSum += (x.eventTime - customerEnterTime.get(x.custId));
-		// System.out.printf("+++++++%f %d\n", x.eventTime, x.custId);
+		// System.out.printf("+++++++%f %d %f\n", x.eventTime, x.custId, customerEnterTime.get(x.custId));
 		if (numberInQ2 > 0) {
 			// Event eventInQ2 = findEvent(DEPARTQ1);
 			insertEvent(DEPARTQ2, time + exp(q2ServiceMeanTime), nextCustQ2);
