@@ -6,9 +6,10 @@ class State extends GlobalSimulation{
 	
 	// Here follows the state variables and other variables that might be needed
 	// e.g. for measurements
-	public int numberInQ1 = 0, numberInQ2 = 0, accumulated = 0, noMeasurements = 0;
+	public int numberInQ1 = 0, numberInQ2 = 0, curNoInQ2Sum = 0, noMeasurements = 0;
 	public int noArrivals = 0, noRejected = 0;
 	private double interArrTime;
+	private double q1MeanServiceTime = 2.1, q2ServiceTime = 2, measureMeanTime = 5;
 
 	Random slump = new Random(); // This is just a random number generator
 	
@@ -48,7 +49,7 @@ class State extends GlobalSimulation{
 			return;
 		}
 		if (numberInQ1 == 0)
-			insertEvent(DEPARTQ1, time + exp(2.1));
+			insertEvent(DEPARTQ1, time + exp(q1MeanServiceTime));
 		numberInQ1++;
 		insertEvent(ARRIVEQ1, time + interArrTime);
 	}
@@ -56,22 +57,22 @@ class State extends GlobalSimulation{
 	private void departq1(){
 		numberInQ1--;
 		if (numberInQ2 == 0) 
-			insertEvent(DEPARTQ2, time + 2);
+			insertEvent(DEPARTQ2, time + q2ServiceTime);
 		numberInQ2++;
 		if (numberInQ1 > 0)
-			insertEvent(DEPARTQ1, time + exp(2.1));
+			insertEvent(DEPARTQ1, time + exp(q1MeanServiceTime));
 	}
 	
 	private void departq2() {
 		numberInQ2--;
 		if (numberInQ2 > 0)
-			insertEvent(DEPARTQ2, time + 2);
+			insertEvent(DEPARTQ2, time + q2ServiceTime);
 	}
 	
 	private void measure(){
-		accumulated = accumulated + numberInQ2;
+		curNoInQ2Sum = curNoInQ2Sum + numberInQ2;
 		noMeasurements++;
-		insertEvent(MEASURE, time + exp(5));
+		insertEvent(MEASURE, time + exp(measureMeanTime));
 	}
 	
 	public double exp(double mean) {
