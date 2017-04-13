@@ -6,9 +6,10 @@
 class Event{
 	public double eventTime;
 	public int eventType;
+	public int custId;
 	public Event next;
 	
 	public void show() {
-		System.out.printf("%f %d\n", eventTime, eventType);
+		System.out.printf("%f %d %d\n", eventTime, eventType, custId);
 	}
 }

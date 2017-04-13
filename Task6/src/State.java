@@ -6,33 +6,25 @@ class State extends GlobalSimulation{
 	
 	// Here follows the state variables and other variables that might be needed
 	// e.g. for measurements
-	public int numberInQ1 = 0, numberInQ2 = 0, curNoInQ2Sum = 0, noMeasurements = 0;
+	public int numberInQ = 0;
 	public int noArrivals = 0, noRejected = 0;
-	private double interArrTime;
-	private double q1MeanServiceTime = 2.1, q2ServiceTime = 2, measureMeanTime = 5;
+	public double curTimeInSystemSum = 0, finishTime;
+	private double minServiceTime = 10, maxServiceTime = 20, meanArrivalTime = 15; // minutes
+	private int nextCust = 0;
+	public List<Double> customerEnterTime = new ArrayList<Double>();
 
 	Random slump = new Random(); // This is just a random number generator
-	
-	public State(double interArrTime) {
-		this.interArrTime = interArrTime;
-	}
 	
 	// The following method is called by the main program each time a new event has been fetched
 	// from the event list in the main loop. 
 	public void treatEvent(Event x) {
 //		x.show();
 		switch (x.eventType){
-			case ARRIVEQ1:
-				arrivalq1();
+			case ARRIVE:
+				arrival(x);
 				break;
-			case DEPARTQ1:
-				departq1();
-				break;
-			case DEPARTQ2:
-				departq2();
-				break;
-			case MEASURE:
-				measure();
+			case DEPART:
+				departure(x);
 				break;
 		}
 	}
@@ -42,40 +34,39 @@ class State extends GlobalSimulation{
 	// have been placed in the case in treatEvent, but often it is simpler to write a method if 
 	// things are getting more complicated than this.
 	
-	private void arrivalq1(){
-		noArrivals++;
-		if (numberInQ1 == Q1CAPACITY) {
-			noRejected++;
-			return;
+	private void arrival(Event x){
+		if (x.eventTime <= endTime) {
+			noArrivals++;
+			numberInQ++;
+			customerEnterTime.add(x.eventTime);
+			if (numberInQ == 1) 
+				insertEvent(DEPART, time + uniform(minServiceTime, maxServiceTime), nextCust);
+			insertEvent(ARRIVE, time + exp(meanArrivalTime), noArrivals);
 		}
-		if (numberInQ1 == 0)
-			insertEvent(DEPARTQ1, time + exp(q1MeanServiceTime));
-		numberInQ1++;
-		insertEvent(ARRIVEQ1, time + interArrTime);
 	}
 	
-	private void departq1(){
-		numberInQ1--;
-		if (numberInQ2 == 0) 
-			insertEvent(DEPARTQ2, time + q2ServiceTime);
-		numberInQ2++;
-		if (numberInQ1 > 0)
-			insertEvent(DEPARTQ1, time + exp(q1MeanServiceTime));
+	private void departure(Event x) {
+		nextCust++;
+		numberInQ--;
+		if (x.custId < customerEnterTime.size())
+			curTimeInSystemSum += (x.eventTime - customerEnterTime.get(x.custId));
+		if (numberInQ > 0)
+			insertEvent(DEPART, time + uniform(minServiceTime, maxServiceTime), nextCust);
 	}
 	
-	private void departq2() {
-		numberInQ2--;
-		if (numberInQ2 > 0)
-			insertEvent(DEPARTQ2, time + q2ServiceTime);
+	public boolean isFinished() {
+		if (time > endTime && numberInQ == 0) {
+			finishTime = time;
+			return true;
+		}
+		return false;
 	}
 	
-	private void measure(){
-		curNoInQ2Sum = curNoInQ2Sum + numberInQ2;
-		noMeasurements++;
-		insertEvent(MEASURE, time + exp(measureMeanTime));
-	}
-	
-	public double exp(double mean) {
+	private double exp(double mean) {
 		return -Math.log(1-slump.nextDouble())*mean;
+	}
+	
+	private double uniform(double min, double max) {
+		return min + (max - min) * slump.nextDouble();
 	}
 }
