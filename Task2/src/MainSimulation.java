@@ -5,8 +5,7 @@ public class MainSimulation extends GlobalSimulation{
  
     public static void main(String[] args) throws IOException {
    
-    	double[] arrTimes = {1/150,2,5}; 
-    	double poisson = 1/150;
+    	double[] arrTimes = {150,2,5}; 
     	
     	for (int i=0; i<3; i++) {
     		time = 0;
@@ -14,7 +13,7 @@ public class MainSimulation extends GlobalSimulation{
         	State actState = new State(arrTimes[i]); // The state that shoud be used
 
         	// Some events must be put in the event list at the beginning
-        	insertEvent(ARRIVAL, 0);  
+        	insertEvent(ARRIVALJA, 0);  
             insertEvent(MEASURE, 0.1);
         	// The main simulation loop
         	while (actState.noMeasurements<1000){
