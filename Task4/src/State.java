@@ -1,17 +1,27 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
 
 class State extends GlobalSimulation{
 	
 	// Here follows the state variables and other variables that might be needed
 	// e.g. for measurements
-    int numberOfMeasure = 0, numberOfArr = 0, accumulated = 0;
+    int numberOfMeasure = 0, accumulated = 0;
     int numberOfAvailServers;
 	public SimulationData simDat;
+	String fileName;
+	FileWriter out;
 
 	Random slump = new Random(); // This is just a random number generator
 	
-	public State(SimulationData simDat) {
-		this.simDat = simDat;
+	public State(SimulationData simDat, String fileName) {
+	    this.fileName = fileName;
+        try {
+            out = new FileWriter(fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.simDat = simDat;
 		this.numberOfAvailServers = simDat.numberOfServers;
 	}
 	
@@ -28,8 +38,12 @@ class State extends GlobalSimulation{
 				depart();
 				break;
 			case MEASURE:
-				measure();
-				break;
+                try {
+                    measure();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
 		}
 	}
 	
@@ -51,10 +65,10 @@ class State extends GlobalSimulation{
 	    numberOfAvailServers++;
 	}
 
-	private void measure(){
-//	    if (simDat.measureTime == 4 && simDat.numberOfMeasure == 1000)
-//	        System.out.printf("%d %d %d\n", simDat.numberOfServers, numberOfAvailServers, simDat.numberOfServers - numberOfAvailServers);
-	    accumulated += (simDat.numberOfServers - numberOfAvailServers);
+	private void measure() throws IOException {
+	    int numberOfCus = simDat.numberOfServers - numberOfAvailServers;
+	    out.write("" +  time + " " + numberOfCus + "\n");
+		accumulated += numberOfCus;
         numberOfMeasure++;
 		insertEvent(MEASURE, time + simDat.measureTime);
 	}
