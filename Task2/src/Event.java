@@ -7,7 +7,7 @@ class Event{
 	public double eventTime;
 	public int eventType;
 	public Event next;
-	public int jobType = 1; //initialize as job A, always
+	//public int jobType = 1; //initialize as job A, always
 	
 	public void show() {
 		System.out.printf("%f %d\n", eventTime, eventType);
