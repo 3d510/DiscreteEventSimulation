@@ -21,6 +21,5 @@ public class SimulationData {
         System.out.println(arrivalRate);
         System.out.println(measureTime);
         System.out.println(numberOfMeasure);
-
     }
 }
