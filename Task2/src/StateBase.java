@@ -9,7 +9,7 @@ public abstract class StateBase extends GlobalSimulation {
     FileWriter out;
 
     public void treatEvent(Event x) {
-//		x.show();
+		//x.show();
         switch (x.eventType){
             case ARRIVEQA:
                 arriveQA();

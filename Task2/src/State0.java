@@ -12,6 +12,8 @@ class State0 extends StateBase {
     }
 
     public void delay() {
+        if (numberInQA == 0)
+            return;
         numberInQA--;
         insertEvent(ARRIVEQB, time + generateDelayTime());
         if (numberInQA > 0 && numberInQB == 0)

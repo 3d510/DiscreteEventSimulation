@@ -26,9 +26,7 @@ public class EventListClass {
 	 	predummy.next = newEvent;
 	 	newEvent.next = dummy;
 	}
-	
-	
-	
+
 	// The following method removes and returns the first event in the list. That is the
 	// event with the smallest time stamp, i.e. the next thing that shall take place.
 	
