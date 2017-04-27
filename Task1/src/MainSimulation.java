@@ -9,6 +9,7 @@ public class MainSimulation extends GlobalSimulation{
     	
     	for (int i=0; i<3; i++) {
     		time = 0;
+    		eventList = new EventListClass();
         	Event actEvent;
         	State actState = new State(arrTimes[i]); // The state that shoud be used
 

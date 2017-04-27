@@ -13,12 +13,14 @@ public class MainSimulation extends GlobalSimulation{
 		states[0] = new State0();
         states[1] = new State1();
         states[2] = new State2();
+		String prefixFilePath = System.getProperty("user.dir") + File.separator + "Task2" + File.separator;
 
     	for (int i=0; i<3; i++) {
     		time = 0;
+			eventList = new EventListClass();
         	Event actEvent;
         	StateBase actState = states[i]; // The state that shoud be used
-
+			actState.out = new FileWriter(prefixFilePath + "Question" + (i+1) + "Task2.txt");
         	// Some events must be put in the event list at the beginning
         	insertEvent(ARRIVEQA, 0);
             insertEvent(MEASURE, 0.1);
@@ -28,6 +30,7 @@ public class MainSimulation extends GlobalSimulation{
         		time = actEvent.eventTime;
         		actState.treatEvent(actEvent);
         	}
+        	actState.out.close();
             System.out.println(messages[i]);
         	System.out.printf("Mean number of customers in queue: %f\n", 1.0*actState.accumulated/actState.noMeasurements);
         	System.out.println();

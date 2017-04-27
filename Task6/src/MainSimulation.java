@@ -10,6 +10,7 @@ public class MainSimulation extends GlobalSimulation{
     	
     	for (int i=0; i<numberOfDays; i++) {
     		time = startTime;
+			eventList = new EventListClass();
         	Event actEvent;
         	State actState = new State(); // The state that should be used
 

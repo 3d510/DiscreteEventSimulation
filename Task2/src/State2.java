@@ -16,8 +16,8 @@ class State2 extends StateBase {
         insertEvent(ARRIVEQB, time + generateDelayTime());
         if (numberInQA > 0)
             insertEvent(DELAY, time + jobAServiceTime);
-        if (numberInQB > 0 && numberInQA == 0)
-            insertEvent(DEPART, time + jobBServiceTime);
+//        if (numberInQB > 0 && numberInQA == 0)
+//            insertEvent(DEPART, time + jobBServiceTime);
     }
 
     public void arriveQB() {

@@ -28,8 +28,6 @@ class State extends GlobalSimulation{
 	// The following method is called by the main program each time a new event has been fetched
 	// from the event list in the main loop. 
 	public void treatEvent(Event x) {
-//        if (simDat.measureTime == 4 && simDat.numberOfMeasure == 1000)
-//		    x.show();
 		switch (x.eventType){
 			case ARRIVE:
 				arrive();
@@ -56,7 +54,7 @@ class State extends GlobalSimulation{
         if (numberOfAvailServers == 0)
             return;
         numberOfAvailServers--;
-        if(simDat.numberOfServers - numberOfAvailServers > 0)
+        if(simDat.numberOfServers - numberOfAvailServers > 0) // there are still customers in the system
             insertEvent(DEPART, time + simDat.serviceTime);
         insertEvent(ARRIVE, time + exp(1.0/simDat.arrivalRate));
 	}
@@ -67,7 +65,7 @@ class State extends GlobalSimulation{
 
 	private void measure() throws IOException {
 	    int numberOfCus = simDat.numberOfServers - numberOfAvailServers;
-	    out.write("" +  time + " " + numberOfCus + "\n");
+	    out.write("" +  time + " " + numberOfCus + "\r\n");
 		accumulated += numberOfCus;
         numberOfMeasure++;
 		insertEvent(MEASURE, time + simDat.measureTime);

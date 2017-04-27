@@ -1,9 +1,12 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
 
 public abstract class StateBase extends GlobalSimulation {
 
     public int numberInQA = 0, numberInQB = 0, accumulated = 0, noMeasurements = 0;
     Random slump = new Random();
+    FileWriter out;
 
     public void treatEvent(Event x) {
 //		x.show();
@@ -21,7 +24,11 @@ public abstract class StateBase extends GlobalSimulation {
                 depart();
                 break;
             case MEASURE:
-                measure();
+                try {
+                    measure();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }
@@ -31,8 +38,9 @@ public abstract class StateBase extends GlobalSimulation {
     public abstract void delay();
     public abstract void depart();
 
-    private void measure(){
+    private void measure() throws IOException {
         int numberInQueue = numberInQA + numberInQB;
+        out.write("" +  time + " " + numberInQueue + " " + numberInQA + "\r\n");
         accumulated = accumulated + numberInQueue;
         noMeasurements++;
         insertEvent(MEASURE, time + measureTime);

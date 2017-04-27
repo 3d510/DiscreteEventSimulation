@@ -10,6 +10,7 @@ public class MainSimulation extends GlobalSimulation{
     	
     	for (int day = 1; day <= numDays; day++) {
     		time = 0;
+			eventList = new EventListClass();
         	Event actEvent;
         	State actState = new State();
     		for (int i = 1; i < 5; i++) {
