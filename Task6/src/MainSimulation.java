@@ -6,7 +6,7 @@ public class MainSimulation extends GlobalSimulation{
     public static void main(String[] args) throws IOException {
    
     	int numberOfDays = 1000; 
-    	double curFinishTimeSum = 0;
+    	double curFinishTimeSum = 0, curTimeInSystemSum = 0;
     	
     	for (int i=0; i<numberOfDays; i++) {
     		time = startTime;
@@ -23,17 +23,22 @@ public class MainSimulation extends GlobalSimulation{
         		actState.treatEvent(actEvent);
         	}
         	curFinishTimeSum += actState.finishTime;
+        	curTimeInSystemSum += actState.curTimeInSystemSum/actState.noArrivals;
         	System.out.println("Working day " + (i+1) + ":");
-        	System.out.printf("Finish Time: %f\n", actState.finishTime/60);
+        	System.out.printf("Finish Time: %s\n", displayTime(actState.finishTime/60));
         	System.out.printf("Average time of the form in the system: %f mins\n", actState.curTimeInSystemSum/actState.noArrivals); 
         	System.out.println();
     	}
+    	System.out.println("--------SUMMARY----------");
     	System.out.printf("Mean finish time is %s\n", displayTime((curFinishTimeSum/numberOfDays)/60));
+    	System.out.printf("Mean time for a prescription in the system: %f\n", curTimeInSystemSum/numberOfDays);
     }
     
     public static String displayTime(double timeInHours) {
     	int hour = (int)timeInHours;
     	int min = (int)(60.0 * (timeInHours - (double)hour));
+    	if (min < 10)
+    		return "" + hour + ":0" + min;
     	return "" + hour + ":" + min;
     }
 }

@@ -46,7 +46,6 @@ class State extends GlobalSimulation{
 	// things are getting more complicated than this.
 	
 	private void arrivalq1(Event x){
-		// System.out.printf("------%f %d\n", x.eventTime, x.custId);
 		customerEnterTime.add(x.eventTime);
 		noArrivals++;
 		numberInQ1++;
@@ -74,9 +73,7 @@ class State extends GlobalSimulation{
 		nextCustQ2++;
 		if (x.custId < customerEnterTime.size())
 			curTimeInSystemSum += (x.eventTime - customerEnterTime.get(x.custId));
-		// System.out.printf("+++++++%f %d %f\n", x.eventTime, x.custId, customerEnterTime.get(x.custId));
 		if (numberInQ2 > 0) {
-			// Event eventInQ2 = findEvent(DEPARTQ1);
 			insertEvent(DEPARTQ2, time + exp(q2ServiceMeanTime), nextCustQ2);
 		}
 	}

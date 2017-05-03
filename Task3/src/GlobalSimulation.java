@@ -11,7 +11,4 @@ public class GlobalSimulation{
 	public static void insertEvent(int type, double TimeOfEvent, int id){  // Just to be able to skip dot notation
 		eventList.InsertEvent(type, TimeOfEvent, id);
 	}
-//	public static Event findEvent(int eventType) {
-//		return eventList.findEvent(eventType);
-//	}
 }
