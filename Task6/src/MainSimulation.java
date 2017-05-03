@@ -23,10 +23,10 @@ public class MainSimulation extends GlobalSimulation{
         		actState.treatEvent(actEvent);
         	}
         	curFinishTimeSum += actState.finishTime;
-        	curTimeInSystemSum += actState.curTimeInSystemSum/actState.noArrivals;
+        	curTimeInSystemSum += actState.calTimeInSystem();
         	System.out.println("Working day " + (i+1) + ":");
         	System.out.printf("Finish Time: %s\n", displayTime(actState.finishTime/60));
-        	System.out.printf("Average time of the form in the system: %f mins\n", actState.curTimeInSystemSum/actState.noArrivals); 
+        	System.out.printf("Average time of the form in the system: %f mins\n", actState.calTimeInSystem());
         	System.out.println();
     	}
     	System.out.println("--------SUMMARY----------");

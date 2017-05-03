@@ -24,9 +24,8 @@ public class MainSimulation extends GlobalSimulation{
         	}
         	System.out.printf("Interarrival time for Q1: %f\n", arrTimes[i]);
         	System.out.printf("Mean number of customers in both queues: %f\n", 1.0*actState.curCustomersSum/actState.noMeasurements);
-        	System.out.printf("Mean time of customer in system: %f\n", actState.curTimeInSystemSum/actState.noArrivals);
+        	System.out.printf("Mean time of customer in system: %f\n", actState.calTimeInSystem());
         	System.out.println();
     	}
-    	
     }
 }

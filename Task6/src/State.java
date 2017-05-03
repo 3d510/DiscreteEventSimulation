@@ -12,6 +12,7 @@ class State extends GlobalSimulation{
 	private double minServiceTime = 10, maxServiceTime = 20, meanArrivalTime = 15; // minutes
 	private int nextCust = 0;
 	public List<Double> customerEnterTime = new ArrayList<Double>();
+	public List<Double> customerLeaveTime = new ArrayList<Double>();
 
 	Random slump = new Random(); // This is just a random number generator
 	
@@ -39,7 +40,7 @@ class State extends GlobalSimulation{
 			noArrivals++;
 			numberInQ++;
 			customerEnterTime.add(x.eventTime);
-			if (numberInQ == 1) 
+			if (numberInQ == 1)
 				insertEvent(DEPART, time + uniform(minServiceTime, maxServiceTime), nextCust);
 			insertEvent(ARRIVE, time + exp(meanArrivalTime), noArrivals);
 		}
@@ -48,8 +49,7 @@ class State extends GlobalSimulation{
 	private void departure(Event x) {
 		nextCust++;
 		numberInQ--;
-		if (x.custId < customerEnterTime.size())
-			curTimeInSystemSum += (x.eventTime - customerEnterTime.get(x.custId));
+		customerLeaveTime.add(x.eventTime);
 		if (numberInQ > 0)
 			insertEvent(DEPART, time + uniform(minServiceTime, maxServiceTime), nextCust);
 	}
@@ -60,6 +60,15 @@ class State extends GlobalSimulation{
 			return true;
 		}
 		return false;
+	}
+
+	// return two values: number of jobs entering this queue and their total time in system
+	public double calTimeInSystem() {
+		double totalTimeInSystem = 0;
+		for (int i = 0; i < customerLeaveTime.size(); i++) {
+			totalTimeInSystem += customerLeaveTime.get(i) - customerEnterTime.get(i);
+		}
+		return totalTimeInSystem/customerLeaveTime.size()*1.0;
 	}
 	
 	private double exp(double mean) {

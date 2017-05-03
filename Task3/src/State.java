@@ -8,11 +8,10 @@ class State extends GlobalSimulation{
 	// e.g. for measurements
 	private static double q1ServiceMeanTime = 1, q2ServiceMeanTime = 1, measureMeanTime = 5;
 	public int numberInQ1 = 0, numberInQ2 = 0, curCustomersSum = 0, noMeasurements = 0, noArrivals = 0;
-	public double curTimeInSystemSum = 0;
 	private double interArrTime;
 	private int nextCustQ1 = 0, nextCustQ2 = 0;
 	public List<Double> customerEnterTime = new ArrayList<Double>();
-	// private List<Integer> customerStatus = new ArrayList<Integer>();
+	public List<Double> customerLeaveTime = new ArrayList<Double>();
 
 	Random slump = new Random(); // This is just a random number generator
 	
@@ -55,7 +54,7 @@ class State extends GlobalSimulation{
 		insertEvent(ARRIVEQ1, time + exp(interArrTime), noArrivals);
 	}
 	
-	private void departq1(Event x){
+	private void departq1(Event x) {
 		numberInQ1--;
 		numberInQ2++;
 		nextCustQ1++;
@@ -71,13 +70,21 @@ class State extends GlobalSimulation{
 	private void departq2(Event x) {
 		numberInQ2--;
 		nextCustQ2++;
-		if (x.custId < customerEnterTime.size())
-			curTimeInSystemSum += (x.eventTime - customerEnterTime.get(x.custId));
+		customerLeaveTime.add(x.eventTime);
 		if (numberInQ2 > 0) {
 			insertEvent(DEPARTQ2, time + exp(q2ServiceMeanTime), nextCustQ2);
 		}
 	}
-	
+
+	// return two values: number of jobs entering this queue and their total time in system
+	public double calTimeInSystem() {
+		double totalTimeInSystem = 0;
+		for (int i = 0; i < customerLeaveTime.size(); i++) {
+			totalTimeInSystem += customerLeaveTime.get(i) - customerEnterTime.get(i);
+		}
+		return totalTimeInSystem/customerLeaveTime.size()*1.0;
+	}
+
 	private void measure() {
 		curCustomersSum += (numberInQ1 + numberInQ2);
 		noMeasurements++;
