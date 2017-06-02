@@ -46,11 +46,11 @@ class State extends GlobalSimulation{
 		noArrivals++;
 		if (numberInQ1 == Q1CAPACITY) {
 			noRejected++;
-			return;
+		} else {
+            numberInQ1++;
 		}
-		if (numberInQ1 == 0)
+		if (numberInQ1 == 1)
 			insertEvent(DEPARTQ1, time + exp(q1MeanServiceTime));
-		numberInQ1++;
 		insertEvent(ARRIVEQ1, time + interArrTime);
 	}
 	
